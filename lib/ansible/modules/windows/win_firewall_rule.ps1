@@ -124,6 +124,7 @@ $localip = Get-AnsibleParam -obj $params -name "localip" -type "str"
 $remoteip = Get-AnsibleParam -obj $params -name "remoteip" -type "str"
 $localport = Get-AnsibleParam -obj $params -name "localport" -type "str"
 $remoteport = Get-AnsibleParam -obj $params -name "remoteport" -type "str"
+$icmp_type_code = Get-AnsibleParam -obj $params -name "icmp_type_code" -type "str"
 $protocol = Get-AnsibleParam -obj $params -name "protocol" -type "str"
 $interfacetypes = Get-AnsibleParam -obj $params -name "interfacetypes" -type "list"
 $edge = Get-AnsibleParam -obj $params -name "edge" -type "str" -validateset "no","yes","deferapp","deferuser"
@@ -161,6 +162,7 @@ try {
     if ($null -ne $protocol -and $protocol -ne "any") { $new_rule.Protocol = Parse-ProtocolType -protocol $protocol }
     if ($null -ne $localport -and $localport -ne "any") { $new_rule.LocalPorts = $localport }
     if ($null -ne $remoteport -and $remoteport -ne "any") { $new_rule.RemotePorts = $remoteport }
+    if ($null -ne $icmp_type_code -and $icmp_type_code -ne "any") { $new_rule.IcmpTypesAndCodes = $icmp_type_code  }
     if ($null -ne $localip -and $localip -ne "any") { $new_rule.LocalAddresses = $localip }
     if ($null -ne $remoteip -and $remoteip -ne "any") { $new_rule.RemoteAddresses = $remoteip }
     if ($null -ne $direction) { $new_rule.Direction = Parse-Direction -directionStr $direction }
@@ -181,7 +183,7 @@ try {
         }
     }
 
-    $fwPropertiesToCompare = @('Name','Description','Direction','Action','ApplicationName','ServiceName','Enabled','Profiles','LocalAddresses','RemoteAddresses','LocalPorts','RemotePorts','Protocol','InterfaceTypes', 'EdgeTraversalOptions', 'SecureFlags')
+    $fwPropertiesToCompare = @('Name','Description','Direction','Action','ApplicationName','ServiceName','Enabled','Profiles','LocalAddresses','RemoteAddresses','LocalPorts','RemotePorts', 'IcmpTypesAndCodes', 'Protocol','InterfaceTypes', 'EdgeTraversalOptions', 'SecureFlags')
     $userPassedArguments = @($name, $description, $direction, $action, $program, $service, $enabled, $profiles, $localip, $remoteip, $localport, $remoteport, $protocol, $interfacetypes, $edge, $security)
 
     if ($state -eq "absent") {
